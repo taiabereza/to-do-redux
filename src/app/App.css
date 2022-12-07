@@ -1,3 +1,110 @@
-body {  
-  background-color:burlywood;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 1.125rem;
+}
+
+ul {
+  list-style-type: none;
+}
+
+body {
+  background-color: cornflowerblue;
+  color: lightgoldenrodyellow;
+}
+
+.App {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.App h2 {
+  line-height: 3.5;
+}
+
+.taskform {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tasklist {
+  margin-top: 4%;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2%;
+}
+
+.taskitem {
+  width: 40%;
+  margin-top: 2%;
+  display: flex;
+  flex-direction: column;
+
+  background-color: steelblue;
+}
+
+.taskitem .taskitemtitle,
+.taskitem .taskitemdescr {
+  word-wrap: break-word;
+  padding: 2% 2% 2% 5%;
+}
+
+.taskitem .taskitemtitle {
+  border-bottom: 2px solid lightgoldenrodyellow;
+}
+
+.taskitem.in-progress {
+  filter: hue-rotate(-230deg);
+}
+
+.taskitem.done {
+  filter: brightness(.7);
+}
+.taskitem.done .taskitemtitle,
+.taskitem.done .taskitemdescr {
+  text-decoration: line-through;
+}
+
+.buttonsset {
+  display: flex;
+  justify-content:center;
+  background-color: steelblue;
+  flex-wrap: wrap;
+}
+
+.buttonsset button {
+  margin: 1%;
+  padding: 2%;
+  background-color:lightgoldenrodyellow;
+  border: none;
+  cursor: pointer;
+}
+
+.buttonsset button:hover {
+  filter: brightness(.8);
+}
+
+.filterbtns {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+}
+
+.filterbtns button {
+  margin: 1%;
+  margin-top: 3%;
+  padding: .8%;
+  cursor: pointer;
+  border: none;
+}
+
+.filterbtns button.active {
+  background: lightgrey;
+  border: 2px inset;
 }
