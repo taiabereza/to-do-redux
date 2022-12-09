@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { activeFilterChanged, filterDone, showAll } from "../../actions";
+import { activeDateFilterChanged, activeFilterChanged } from "../../actions";
 
 export default function TaskFilter() {
     const dispatch = useDispatch();
@@ -12,7 +11,7 @@ export default function TaskFilter() {
     }
 
     const handleDateFilterChange = (e) => {
-        // dispatch(activeFilterChanged(e.target.id));
+        dispatch(activeDateFilterChanged(e.target.id));
     }
 
     const btns = [

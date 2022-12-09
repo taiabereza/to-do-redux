@@ -1,119 +1,159 @@
 const initialState = {
-    todos: [],
-    filteredTodos: [],
-    activeFilter: 'ALL',
-    activeDateFilter: 'OLD_TO_NEW_CREATION'
+	todos: [],
+	filteredTodos: [],
+	activeFilter: 'ALL',
+	activeDateFilter: 'OLD_TO_NEW_CREATION'
+}
+
+const filterPattern = (todos, activeFilter, activeDateFilter) => {
+	let filteredArr = todos;
+
+	if (activeFilter === 'ALL') {
+		switch (activeDateFilter) {
+			case 'OLD_TO_NEW_CREATION':
+				filteredArr = filteredArr.filter(todo => todo).sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate))
+				break;
+			case 'NEW_TO_OLD_CREATION':
+				filteredArr = filteredArr.filter(todo => todo).sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
+				break;
+			case 'OLD_TO_NEW_UPDATE':
+				filteredArr = filteredArr.filter(todo => todo).sort((a, b) => new Date(a.updateDate) - new Date(b.updateDate))
+				break;
+			case 'NEW_TO_OLD_UPDATE':
+				filteredArr = filteredArr.filter(todo => todo).sort((a, b) => new Date(b.updateDate) - new Date(a.updateDate))
+				break;
+		}
+	}
+
+	if (activeFilter === 'DONE') {
+		switch (activeDateFilter) {
+			case 'OLD_TO_NEW_CREATION':
+				filteredArr = filteredArr.filter(todo => todo.status.done).sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate))
+				break;
+			case 'NEW_TO_OLD_CREATION':
+				filteredArr = filteredArr.filter(todo => todo.status.done).sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
+				break;
+			case 'OLD_TO_NEW_UPDATE':
+				filteredArr = filteredArr.filter(todo => todo.status.done).sort((a, b) => new Date(a.updateDate) - new Date(b.updateDate))
+				break;
+			case 'NEW_TO_OLD_UPDATE':
+				filteredArr = filteredArr.filter(todo => todo.status.done).sort((a, b) => new Date(b.updateDate) - new Date(a.updateDate))
+				break;
+		}
+	}
+
+	if (activeFilter === 'IN_PROGRESS') {
+		switch (activeDateFilter) {
+			case 'OLD_TO_NEW_CREATION':
+				filteredArr = filteredArr.filter(todo => !todo.status.open && !todo.status.done).sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate))
+				break;
+			case 'NEW_TO_OLD_CREATION':
+				filteredArr = filteredArr.filter(todo => !todo.status.open && !todo.status.done).sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
+				break;
+			case 'OLD_TO_NEW_UPDATE':
+				filteredArr = filteredArr.filter(todo => !todo.status.open && !todo.status.done).sort((a, b) => new Date(a.updateDate) - new Date(b.updateDate))
+				break;
+			case 'NEW_TO_OLD_UPDATE':
+				filteredArr = filteredArr.filter(todo => !todo.status.open && !todo.status.done).sort((a, b) => new Date(b.updateDate) - new Date(a.updateDate))
+				break;
+		}
+	}
+
+	if (activeFilter === 'OPEN') {
+		switch (activeDateFilter) {
+			case 'OLD_TO_NEW_CREATION':
+				filteredArr = filteredArr.filter(todo => todo.status.open && !todo.status.done).sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate))
+				break;
+			case 'NEW_TO_OLD_CREATION':
+				filteredArr = filteredArr.filter(todo => todo.status.open && !todo.status.done).sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
+				break;
+			case 'OLD_TO_NEW_UPDATE':
+				filteredArr = filteredArr.filter(todo => todo.status.open && !todo.status.done).sort((a, b) => new Date(a.updateDate) - new Date(b.updateDate))
+				break;
+			case 'NEW_TO_OLD_UPDATE':
+				filteredArr = filteredArr.filter(todo => todo.status.open && !todo.status.done).sort((a, b) => new Date(b.updateDate) - new Date(a.updateDate))
+				break;
+		}
+	}
+
+	return filteredArr;
 }
 
 export default function handleToDo(state = initialState, action) {
-    switch (action.type) {
-        case 'ADD_TODO':
-            const newTodosAdded = [...state.todos, action.payload];
-            return {
-                ...state,
-                todos: newTodosAdded,
-                filteredTodos: state.activeFilter === 'DONE' ?
-                    newTodosAdded.filter(todo => todo.status.done)
-                    : state.activeFilter === 'IN_PROGRESS' ?
-                        newTodosAdded.filter(todo => !todo.status.open && !todo.status.done)
-                        : state.activeFilter === 'OPEN' ?
-                            newTodosAdded.filter(todo => todo.status.open && !todo.status.done)
-                            : newTodosAdded
-            }
-        case 'REMOVE_TODO':
-            const newTodosRemoved = state.todos.filter((todo) => todo.id !== action.payload);
-            return {
-                ...state,
-                todos: newTodosRemoved,
-                filteredTodos: state.activeFilter === 'DONE' ?
-                    newTodosRemoved.filter(todo => todo.status.done)
-                    : state.activeFilter === 'IN_PROGRESS' ?
-                        newTodosRemoved.filter(todo => !todo.status.open && !todo.status.done)
-                        : state.activeFilter === 'OPEN' ?
-                            newTodosRemoved.filter(todo => todo.status.open && !todo.status.done)
-                            : newTodosRemoved
-            }
-        case 'EDIT_TODO':
-            return {
-                ...state,
-                todos: state.todos.map((todo) => {
-                    if (todo.id === action.payload.id) {
-                        let updatedTodo = {
-                            ...todo,
-                            tasktitle: action.payload.tasktitle,
-                            taskdescr: action.payload.taskdescr,
-                            updateDate: action.payload.updateDate,
-                        }
-                        return updatedTodo
-                    } else {
-                        return todo
-                    }
-                }),
-                filteredTodos: state.filteredTodos.map((todo) => {
-                    if (todo.id === action.payload.id) {
-                        let updatedTodo = {
-                            ...todo,
-                            tasktitle: action.payload.tasktitle,
-                            taskdescr: action.payload.taskdescr,
-                            updateDate: action.payload.updateDate,
-                        }
-                        return updatedTodo
-                    } else {
-                        return todo
-                    }
-                })
-            };
-        case 'MARK_TODO_DONE':
-            let newTodosDone = state.todos.map((todo) => {
-                todo.id === action.payload
-                    ? todo.status.done = !todo.status.done
-                    : todo.status.done
-                return todo
-            });
+	switch (action.type) {
+		case 'ADD_TODO':
+			const newTodosAdded = [...state.todos, action.payload];
+			return {
+				...state,
+				todos: newTodosAdded,
+				filteredTodos: filterPattern(newTodosAdded, state.activeFilter, state.activeDateFilter)
+			}
+		case 'REMOVE_TODO':
+			const newTodosRemoved = state.todos.filter((todo) => todo.id !== action.payload);
+			return {
+				...state,
+				todos: newTodosRemoved,
+				filteredTodos: filterPattern(newTodosRemoved, state.activeFilter, state.activeDateFilter)
+			}
+		case 'EDIT_TODO':
+			const newTodosEdited = state.todos.map((todo) => {
+				if (todo.id === action.payload.id) {
+					let updatedTodo = {
+						...todo,
+						tasktitle: action.payload.tasktitle,
+						taskdescr: action.payload.taskdescr,
+						updateDate: action.payload.updateDate,
+					}
+					return updatedTodo
+				} else {
+					return todo
+				}
+			});
 
-            return {
-                ...state,
-                todos: newTodosDone,
-                filteredTodos: state.activeFilter === 'DONE' ?
-                    newTodosDone.filter(todo => todo.status.done)
-                    : state.activeFilter === 'IN_PROGRESS' ?
-                        newTodosDone.filter(todo => !todo.status.open && !todo.status.done)
-                        : state.activeFilter === 'OPEN' ?
-                            newTodosDone.filter(todo => todo.status.open && !todo.status.done)
-                            : newTodosDone
-            }
-        case 'MARK_TODO_IN_PROGRESS':
-            let newTodosInProgress = state.todos.map((todo) => {
-                todo.id === action.payload
-                    ? todo.status.open = !todo.status.open
-                    : todo.status.open
-                return todo
-            });
+			return {
+				...state,
+				todos: newTodosEdited,
+				filteredTodos: filterPattern(newTodosEdited, state.activeFilter, state.activeDateFilter)
+			};
+		case 'MARK_TODO_DONE':
+			let newTodosDone = state.todos.map((todo) => {
+				todo.id === action.payload
+					? todo.status.done = !todo.status.done
+					: todo.status.done
+				return todo
+			});
 
-            return {
-                ...state,
-                todos: newTodosInProgress,
-                filteredTodos: state.activeFilter === 'DONE' ?
-                    newTodosInProgress.filter(todo => todo.status.done)
-                    : state.activeFilter === 'IN_PROGRESS' ?
-                        newTodosInProgress.filter(todo => !todo.status.open && !todo.status.done)
-                        : state.activeFilter === 'OPEN' ?
-                            newTodosInProgress.filter(todo => todo.status.open && !todo.status.done)
-                            : newTodosInProgress
-            }
-        case 'ACTIVE_FILTER_CHANGED':
-            return {
-                ...state,
-                filteredTodos: action.payload === 'DONE' ?
-                    state.todos.filter(todo => todo.status.done)
-                    : action.payload === 'IN_PROGRESS' ?
-                        state.todos.filter(todo => !todo.status.open && !todo.status.done)
-                        : action.payload === 'OPEN' ?
-                            state.todos.filter(todo => todo.status.open && !todo.status.done)
-                            : state.todos,
-                activeFilter: action.payload
-            }
-        default:
-            return state;
-    }
+			return {
+				...state,
+				todos: newTodosDone,
+				filteredTodos: filterPattern(newTodosDone, state.activeFilter, state.activeDateFilter)
+			}
+		case 'MARK_TODO_IN_PROGRESS':
+			let newTodosInProgress = state.todos.map((todo) => {
+				todo.id === action.payload
+					? todo.status.open = !todo.status.open
+					: todo.status.open
+				return todo
+			});
+
+			return {
+				...state,
+				todos: newTodosInProgress,
+				filteredTodos: filterPattern(newTodosInProgress, state.activeFilter, state.activeDateFilter)
+			}
+		case 'ACTIVE_FILTER_CHANGED':
+			return {
+				...state,
+				filteredTodos: filterPattern(state.todos, action.payload, state.activeDateFilter),
+				activeFilter: action.payload
+			}
+		case 'ACTIVE_DATE_FILTER_CHANGED':
+			return {
+				...state,
+				filteredTodos: filterPattern(state.todos, state.activeFilter, action.payload),
+				activeDateFilter: action.payload
+			}
+		default:
+			return state;
+	}
 }

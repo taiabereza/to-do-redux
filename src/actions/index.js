@@ -39,3 +39,10 @@ export const activeFilterChanged = (payload) => {
         payload
     }
 }
+
+export const activeDateFilterChanged = (payload) => {
+    return {
+        type: 'ACTIVE_DATE_FILTER_CHANGED',
+        payload
+    }
+}
