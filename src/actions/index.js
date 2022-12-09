@@ -33,14 +33,9 @@ export const markTodoInProgress = (payload) => {
     }
 }
 
-export const showAll = () => {
+export const activeFilterChanged = (payload) => {
     return {
-        type: 'SHOW_ALL'
-    }
-}
-
-export const filterDone = () => {
-    return {
-        type: 'FILTER_DONE'
+        type: 'ACTIVE_FILTER_CHANGED',
+        payload
     }
 }

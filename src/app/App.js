@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
+import TaskFilter from './components/TaskFilter';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         editValue={editValue}
         setEditValue={setEditValue}
       />
+    <TaskFilter />
     <TaskList
       isFormEdit={isFormEdit}
       setIsFormEdit={setIsFormEdit}

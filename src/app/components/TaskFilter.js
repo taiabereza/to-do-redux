@@ -1,82 +1,84 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { filterDone, showAll } from "../../actions";
+import { useSelector, useDispatch } from "react-redux";
+import { activeFilterChanged, filterDone, showAll } from "../../actions";
 
 export default function TaskFilter() {
-	const dispatch = useDispatch();
-    const [active, setActive] = useState('filter-all');
+    const dispatch = useDispatch();
+    const activeFilter = useSelector((state) => state.handleToDo.activeFilter);
+    const activeDateFilter = useSelector((state) => state.handleToDo.activeDateFilter);
 
-    const handleOnClick = (e) => {
-        setActive(e.target.id);
-        switch (e.target.id) {
-            case 'filter-done':
-                dispatch(filterDone());
-                break;
-            default:
-                dispatch(showAll());
-                break;
-        }
+    const handleActiveFilterChange = (e) => {
+        dispatch(activeFilterChanged(e.target.id));
+    }
+
+    const handleDateFilterChange = (e) => {
+        // dispatch(activeFilterChanged(e.target.id));
     }
 
     const btns = [
         {
-            id: 'filter-all',
+            id: 'ALL',
             text: 'ALL TASKS'
         },
         {
-            id: 'filter-open',
+            id: 'OPEN',
             text: 'OPEN TASKS'
         },
         {
-            id: 'filter-inprogress',
+            id: 'IN_PROGRESS',
             text: 'IN-PROGRESS TASKS'
         },
         {
-            id: 'filter-done',
+            id: 'DONE',
             text: 'DONE TASKS'
         }
     ];
 
+    const dateBtns = [
+        {
+            id: 'OLD_TO_NEW_CREATION',
+            text: 'OLDER FIRST (BY CREATION DATE)'
+        },
+        {
+            id: 'NEW_TO_OLD_CREATION',
+            text: 'NEWER FIRST (BY CREATION DATE)'
+        },
+        {
+            id: 'OLD_TO_NEW_UPDATE',
+            text: 'OLDER FIRST (BY UPDATE DATE)'
+        },
+        {
+            id: 'NEW_TO_OLD_UPDATE',
+            text: 'NEWER FIRST (BY UPDATE DATE)'
+        }
+    ];
+
+
     return (
-        <div className="filterbtns">
+        <>
+            <div className="filterbtns">
+                {btns.map((btn) => (
+                    <button id={btn.id}
+                        key={btn.id}
+                        className={((activeFilter === btn.id) ? 'active' : null)}
+                        onClick={(e) => handleActiveFilterChange(e)}
+                    >
+                        {btn.text}
+                    </button>
+                ))}
+            </div>
 
-            {btns.map((btn) => (
-                <button id={btn.id}
-                key={btn.id}
-                className={((active === btn.id) ? 'active' : null)}
-                onClick={(e) => handleOnClick(e)}
-            >
-                {btn.text}
-            </button>
-            ))}
-
-            {/* <button id="filter-all"
-                className="filter-all"
-                onClick={(e) => handleOnClick(e)}
-            >
-                ALL TASKS
-            </button>
-
-            <button id="filter-open"
-                className="filter-open"
-                onClick={(e) => handleOnClick(e)}
-            >
-                OPEN TASKS
-            </button>
-
-            <button id="filter-inprogress"
-                className="filter-inprogress"
-                onClick={(e) => handleOnClick(e)}
-            >
-                IN-PROGRESS TASKS
-            </button>
-
-            <button id="filter-done"
-                className="filter-done"
-                onClick={(e) => handleOnClick(e)}
-            >
-                DONE TASKS
-            </button> */}
-        </div>
+            <div className="filterbtns">
+                {dateBtns.map((btn) => (
+                    <button id={btn.id}
+                        key={btn.id}
+                        className={((activeDateFilter === btn.id) ? 'active' : null)}
+                        onClick={(e) => handleDateFilterChange(e)}
+                    >
+                        {btn.text}
+                    </button>
+                ))}
+            </div>
+        </>
     )
 }

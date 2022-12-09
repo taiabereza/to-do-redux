@@ -20,7 +20,10 @@ export default function TaskForm({ isFormEdit,
 		let todo = {
 			tasktitle: tasktitle.trim(),
 			taskdescr: taskdescr.trim(),
-			status: { done: false, open: true },
+			status: {
+				done: false,
+				open: true
+			},
 			id: Math.random() * 1000,
 			creationDate: new Date().toISOString(),
 			updateDate: new Date().toISOString(),

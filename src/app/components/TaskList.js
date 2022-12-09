@@ -8,14 +8,14 @@ export default function TaskList({ isFormEdit,
 
 	const dispatch = useDispatch();
 
-	const todos = useSelector((state) => state.handleToDo);
+	const todos = useSelector((state) => state.handleToDo.filteredTodos);
 
 	return (
 		<ul className="tasklist">
 			{todos.map((todo) => (
 				<li
 					key={todo.id}
-					className={`taskitem 
+					className={`taskitem
 						${todo.status.done ? 'done' : null}
 						${!todo.status.open ? 'in-progress' : null} `}
 				>
