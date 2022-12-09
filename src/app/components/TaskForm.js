@@ -37,6 +37,19 @@ export default function TaskForm({ isFormEdit,
 		document.querySelectorAll('input')[0].focus();
 	}
 
+	const handleOnEditingTask = (e) => {
+		e.preventDefault();
+		let todo = {
+			tasktitle: editTitle.trim(),
+			taskdescr: editDescr.trim(),
+			id: editId,
+			updateDate: new Date().toISOString(),
+		};
+		dispatch(editTodo(todo));
+		setIsFormEdit(false);
+		document.querySelectorAll('input')[0].focus();
+	}
+
 	return (
 		<>
 			{
@@ -95,17 +108,7 @@ export default function TaskForm({ isFormEdit,
 					// FORM WHEN EDITING
 					: <form
 						className="taskform"
-						onSubmit={(e) => {
-							e.preventDefault();
-							let todo = {
-								tasktitle: editTitle.trim(),
-								taskdescr: editDescr.trim(),
-								id: editId,
-								updateDate: new Date().toISOString(),
-							};
-							dispatch(editTodo(todo));
-							setIsFormEdit(false);
-						}}
+						onSubmit={(e) => { handleOnEditingTask(e) }}
 					>
 						<h3>UPDATING TASK...</h3>
 						<input type="text"
@@ -119,6 +122,12 @@ export default function TaskForm({ isFormEdit,
 								...editValue,
 								editTitle: e.target.value
 							})}
+
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') {
+									document.querySelectorAll('textarea')[0].focus();
+								}
+							}}
 						/>
 
 						<textarea name="taskdescr"
@@ -132,6 +141,12 @@ export default function TaskForm({ isFormEdit,
 								...editValue,
 								editDescr: e.target.value
 							})}
+
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') {
+									handleOnEditingTask(e);
+								}
+							}}
 						>
 						</textarea>
 

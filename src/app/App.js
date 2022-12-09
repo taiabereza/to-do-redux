@@ -24,7 +24,6 @@ function App() {
       />
     <TaskFilter />
     <TaskList
-      isFormEdit={isFormEdit}
       setIsFormEdit={setIsFormEdit}
       editValue={editValue}
       setEditValue={setEditValue}

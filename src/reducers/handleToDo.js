@@ -98,7 +98,7 @@ export default function handleToDo(state = initialState, action) {
 		case 'EDIT_TODO':
 			const newTodosEdited = state.todos.map((todo) => {
 				if (todo.id === action.payload.id) {
-					let updatedTodo = {
+					const updatedTodo = {
 						...todo,
 						tasktitle: action.payload.tasktitle,
 						taskdescr: action.payload.taskdescr,
@@ -116,7 +116,7 @@ export default function handleToDo(state = initialState, action) {
 				filteredTodos: filterPattern(newTodosEdited, state.activeFilter, state.activeDateFilter)
 			};
 		case 'MARK_TODO_DONE':
-			let newTodosDone = state.todos.map((todo) => {
+			const newTodosDone = state.todos.map((todo) => {
 				todo.id === action.payload
 					? todo.status.done = !todo.status.done
 					: todo.status.done
@@ -129,7 +129,7 @@ export default function handleToDo(state = initialState, action) {
 				filteredTodos: filterPattern(newTodosDone, state.activeFilter, state.activeDateFilter)
 			}
 		case 'MARK_TODO_IN_PROGRESS':
-			let newTodosInProgress = state.todos.map((todo) => {
+			const newTodosInProgress = state.todos.map((todo) => {
 				todo.id === action.payload
 					? todo.status.open = !todo.status.open
 					: todo.status.open

@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { removeTodo, markTodoDone, markTodoInProgress } from "./../../actions/index";
 
-export default function TaskList({ isFormEdit,
+export default function TaskList({
 	setIsFormEdit, editValue, setEditValue }) {
 
 	const dispatch = useDispatch();
@@ -31,6 +30,7 @@ export default function TaskList({ isFormEdit,
 								editDescr: todo.taskdescr,
 								editId: todo.id
 							})
+							document.querySelectorAll('input')[0].focus();
 						}}
 						>
 							EDIT
